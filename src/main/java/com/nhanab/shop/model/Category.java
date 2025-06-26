@@ -9,6 +9,7 @@ import org.hibernate.type.SqlTypes;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.HashSet;
 
 @Entity
 @Getter
@@ -22,5 +23,5 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();
 }

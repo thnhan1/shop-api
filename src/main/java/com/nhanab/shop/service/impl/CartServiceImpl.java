@@ -25,7 +25,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart getCartByUserId(UUID userId) {
-        return null;
+        return cartRepository.findByUserIdWithItems(userId)
+                .orElseGet(() -> {
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
     }
 
     @Transactional
@@ -41,6 +48,14 @@ public class CartServiceImpl implements CartService {
         ProductVariant productVariant = productVariantRepository.findById(data.getProductVariantId())
                 .orElseThrow(() -> new ResourceNotFoundException("ProductVariant not found"));
 
+        Optional<CartItem> existingItem = cartItemRepository.findByCartIdAndProductVariantId(cart.getId(), productVariant.getId());
+        if (existingItem.isPresent()) {
+            CartItem item = existingItem.get();
+            item.setQuantity(item.getQuantity() + cartItemRequest.getQuantity());
+            item.setUpdatedAt(LocalDateTime.now());
+            return;
+        }
+
         // Tạo CartItem với relationship
         CartItem cartItem = new CartItem();
         cartItem.setProductVariant(productVariant); // Entity relationship
@@ -52,7 +67,6 @@ public class CartServiceImpl implements CartService {
         cartItem.setIsActive(true);
         cartItem.setCreatedAt(LocalDateTime.now());
 
-        // Query 3: Save
         cartItemRepository.save(cartItem);
 //        // Chỉ 1 query, fetch tất cả cần thiết
 //        ProductVariant productVariant = productVariantRepository
@@ -87,17 +101,48 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void removeItemFromCart(UUID userId, UUID cartItemId) {
-
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
+        if (!cartItem.getCart().getUser().getId().equals(userId)) {
+            throw new ResourceNotFoundException("Cart item not found for user");
+        }
+        cartItemRepository.delete(cartItem);
     }
 
     @Override
     public void clearCart(UUID userId) {
-
+        cartRepository.findByUserIdWithItems(userId).ifPresent(cart -> {
+            cart.getItems().clear();
+            cartRepository.save(cart);
+        });
     }
 
     @Override
-    public void mergeGuestCartWithUserCart(UUID string) {
+    public void mergeGuestCartWithUserCart(UUID guestCartId) {
+        Cart guestCart = cartRepository.findById(guestCartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest cart not found"));
+        Cart userCart = getCartByUserId(guestCart.getUser().getId());
 
+        for (CartItem guestItem : guestCart.getItems()) {
+            Optional<CartItem> existing = cartItemRepository
+                    .findByCartIdAndProductVariantId(userCart.getId(), guestItem.getProductVariant().getId());
+            if (existing.isPresent()) {
+                CartItem item = existing.get();
+                item.setQuantity(item.getQuantity() + guestItem.getQuantity());
+            } else {
+                CartItem newItem = new CartItem();
+                newItem.setCart(userCart);
+                newItem.setProductVariant(guestItem.getProductVariant());
+                newItem.setQuantity(guestItem.getQuantity());
+                newItem.setPrice(guestItem.getPrice());
+                newItem.setProductName(guestItem.getProductName());
+                newItem.setImageUrl(guestItem.getImageUrl());
+                cartItemRepository.save(newItem);
+                userCart.getItems().add(newItem);
+            }
+        }
+
+        cartRepository.delete(guestCart);
     }
 }
 
