@@ -24,6 +24,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getCartByUserId(UUID userId) {
         return cartRepository.findByUserId(userId)
+
                 .orElseGet(() -> {
                     User user = userRepository.findById(userId)
                             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -41,6 +42,7 @@ public class CartServiceImpl implements CartService {
         ProductVariant productVariant = productVariantRepository
                 .findByIdWithProductAndImages(cartItemRequest.getProductVariantId())
                 .orElseThrow(() -> new ResourceNotFoundException("ProductVariant not found"));
+
 
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartIdAndProductVariantId(cart.getId(), productVariant.getId());
@@ -83,6 +85,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void clearCart(UUID userId) {
         cartRepository.findByUserId(userId).ifPresent(cart -> {
+
             cart.getItems().clear();
             cartRepository.save(cart);
         });
@@ -116,5 +119,3 @@ public class CartServiceImpl implements CartService {
         cartRepository.delete(guestCart);
     }
 }
-
-
