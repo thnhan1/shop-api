@@ -32,6 +32,6 @@ public class ProductVariant {
     private ProductImage productImage;
 
     @OneToMany(mappedBy = "productVariant")
-    private Set<CartItem> catItems = new HashSet<>();
+    private Set<CartItem> cartItems = new HashSet<>();
 
 }

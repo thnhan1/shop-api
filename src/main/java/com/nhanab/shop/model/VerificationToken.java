@@ -12,8 +12,7 @@ import java.util.UUID;
 @Table(name = "verification_token", uniqueConstraints = @UniqueConstraint(columnNames = {"identifier", "token"}))
 public class VerificationToken {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String identifier;

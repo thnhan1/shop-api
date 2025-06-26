@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table(name = "order_item")
 public class OrderItem {
     @Id
-    @GeneratedValue(generator = "UUID")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private int quantity;
@@ -20,11 +20,11 @@ public class OrderItem {
     @Column(precision = 38, scale = 2)
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_variant_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_variant_id")
     private ProductVariant productVariant;
 }
