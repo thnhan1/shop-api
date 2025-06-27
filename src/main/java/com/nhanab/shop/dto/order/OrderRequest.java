@@ -8,5 +8,6 @@ import java.util.UUID;
 @Data
 public class OrderRequest implements Serializable {
     private UUID userId;
-    private UUID cartId;
+    private ShippingAddress shippingAddress;
+    private OrderBuyer buyerInfo;
 }

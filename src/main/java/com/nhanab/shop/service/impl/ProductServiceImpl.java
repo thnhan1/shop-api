@@ -94,6 +94,27 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    @Override
+    public PagedResponse<ProductSummaryResponse> getSummarizedProductsWithCategory(UUID categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAllByCategoryId(categoryId, pageable);
+
+        List<ProductSummaryResponse> summaries = productPage.getContent()
+                .stream()
+                .map(productMapper::toSummaryResponse)
+                .toList();
+        return PagedResponse.<ProductSummaryResponse>builder()
+                .content(summaries)
+                .pageNumber(productPage.getNumber())
+                .pageSize(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .first(productPage.isFirst())
+                .last(productPage.isLast())
+                .empty(productPage.isEmpty())
+                .build();
+    }
+
 
     @Override
     public void updateProductVariant(UUID variantId, UpdateProductVariantRequest updateProductVariantDto) {

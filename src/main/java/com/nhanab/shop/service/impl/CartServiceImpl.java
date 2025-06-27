@@ -45,12 +45,11 @@ public class CartServiceImpl implements CartService {
 
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartIdAndProductVariantId(cart.getId(), productVariant.getId());
+
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + cartItemRequest.getQuantity());
             item.setUpdatedAt(LocalDateTime.now());
-            item.setPrice(item.getPrice().add(productVariant.getPrice().multiply(BigDecimal.valueOf(cartItemRequest.getQuantity()))));
-
             return;
         }
 

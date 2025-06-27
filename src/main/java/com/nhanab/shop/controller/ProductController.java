@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Tag(name = "Product", description = "Product REST API")
+@Tag(name = "Product", description = "Product management API")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -35,7 +35,13 @@ public class ProductController {
     @ApiResponse(responseCode = "200", description = "Successfully retrieved paginated product summaries", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PagedResponse.class)))
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @GetMapping
-    public PagedResponse<ProductSummaryResponse> getSummarizedProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int size) {
+    public PagedResponse<ProductSummaryResponse> getSummarizedProducts(
+            @RequestParam(value = "categoryId", required = false) UUID categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        if (categoryId!=null) {
+            return productService.getSummarizedProductsWithCategory(categoryId, page, size);
+        }
         return productService.getSummarizedProducts(page, size);
     }
 
@@ -59,6 +65,5 @@ public class ProductController {
         this.productService.updateProductVariant(productVariantId, updateProductVariantDto);
         return ResponseEntity.ok("update product variant successfully");
     }
-
 
 }

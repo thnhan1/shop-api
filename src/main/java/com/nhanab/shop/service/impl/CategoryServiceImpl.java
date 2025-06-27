@@ -2,6 +2,7 @@ package com.nhanab.shop.service.impl;
 
 import com.nhanab.shop.dto.CategoryResponse;
 import com.nhanab.shop.dto.CreateCategoryRequest;
+import com.nhanab.shop.dto.UpdateCategoryDto;
 import com.nhanab.shop.exception.ResourceNotFoundException;
 import com.nhanab.shop.mapper.CategoryMapper;
 import com.nhanab.shop.model.Category;
@@ -33,6 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     public List<CategoryResponse> getAll() {
         return categoryRepository.findAll().stream().map(categoryMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(UUID id, UpdateCategoryDto updateCategoryDto) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category id"));
+        category.setName(updateCategoryDto.getName());
+        categoryRepository.save(category);
     }
 
     public void delete(UUID id) {

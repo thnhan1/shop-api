@@ -1,9 +1,11 @@
 package com.nhanab.shop.model;
 
+import com.nhanab.shop.dto.order.ShippingAddress;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -20,6 +22,23 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private LocalDateTime orderDate;
+    private String orderStatus;
+    private BigDecimal totalAmount;
+    private BigDecimal taxAmount;
+
+    private String trackingNumber;
+    private LocalDateTime estimateDeliveryDate;
+
+    private String note;
+
+    @Embedded
+    private ShippingAddress shippingAddress;
+
+    // private String customerInfo
+    private String phoneNumber;
+    private String customerName;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -31,4 +50,5 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
+
 }

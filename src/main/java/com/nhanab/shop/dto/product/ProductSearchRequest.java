@@ -1,5 +1,7 @@
 package com.nhanab.shop.dto.product;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(hidden = true)
 public class ProductSearchRequest {
     private String name;
     private UUID categoryId;
