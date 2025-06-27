@@ -2,7 +2,7 @@ package com.nhanab.shop.controller;
 
 import com.nhanab.shop.dto.CategoryResponse;
 import com.nhanab.shop.dto.CreateCategoryRequest;
-import com.nhanab.shop.service.impl.CategoryService;
+import com.nhanab.shop.service.impl.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,22 +13,22 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryServiceImpl;
 
     @PostMapping
     public CategoryResponse create(@RequestBody CreateCategoryRequest categoryDto) {
-        return categoryService
+        return categoryServiceImpl
                 .create(categoryDto);
     }
 
     @GetMapping
     public List<CategoryResponse> getAll() {
-        return categoryService.getAll();
+        return categoryServiceImpl.getAll();
     }
 
     @GetMapping("/{id}")
     public CategoryResponse getById(@PathVariable UUID id) {
-        return categoryService.getById(id);
+        return categoryServiceImpl.getById(id);
     }
 
 }

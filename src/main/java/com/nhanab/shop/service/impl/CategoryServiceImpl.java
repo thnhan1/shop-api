@@ -6,6 +6,7 @@ import com.nhanab.shop.exception.ResourceNotFoundException;
 import com.nhanab.shop.mapper.CategoryMapper;
 import com.nhanab.shop.model.Category;
 import com.nhanab.shop.repository.CategoryRepository;
+import com.nhanab.shop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,12 +43,15 @@ public class CartServiceImpl implements CartService {
                 .findByIdWithProductAndImages(cartItemRequest.getProductVariantId())
                 .orElseThrow(() -> new ResourceNotFoundException("ProductVariant not found"));
 
+
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartIdAndProductVariantId(cart.getId(), productVariant.getId());
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + cartItemRequest.getQuantity());
             item.setUpdatedAt(LocalDateTime.now());
+            item.setPrice(item.getPrice().add(productVariant.getPrice().multiply(BigDecimal.valueOf(cartItemRequest.getQuantity()))));
+
             return;
         }
 
@@ -116,5 +120,3 @@ public class CartServiceImpl implements CartService {
         cartRepository.delete(guestCart);
     }
 }
-
-
