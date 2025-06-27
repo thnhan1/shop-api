@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto placeOrder(OrderRequest request) {
+    public OrderDto placeOrder(OrderRequest request, PaymentMethod paymentMethod) {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Cart cart = cartRepository.findByIdWithItems(user.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
-        order.setOrderStatus("PENDING");
+        order.setOrderStatus(OrderStatus.PENDING);
         order.setShippingAddress(request.getShippingAddress());
         order.setPhoneNumber(request.getBuyerInfo().getPhoneNumber());
         order.setCustomerName(request.getBuyerInfo().getName());
@@ -86,8 +86,8 @@ public class OrderServiceImpl implements OrderService {
         Payment payment = new Payment();
         payment.setPaymentAmount(order.getTotalAmount().add(order.getTaxAmount()));
         payment.setOrder(order);
-        payment.setPaymentMethod("BANKING");
-        payment.setPaymentStatus("PENDING");
+        payment.setPaymentMethod(paymentMethod);
+        payment.setPaymentStatus(PaymentStatus.PENDING);
 
         order.setPayment(payment);
         order = orderRepository.save(order);
@@ -131,8 +131,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancelOrder(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus().equals("PENDING")) {
-            order.setOrderStatus("CANCELLED");
+        if (order.getOrderStatus() == OrderStatus.PENDING) {
+            order.setOrderStatus(OrderStatus.CANCELLED);
             order = orderRepository.save(order);
         }
     }

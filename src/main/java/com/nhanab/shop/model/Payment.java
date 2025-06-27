@@ -3,6 +3,8 @@ package com.nhanab.shop.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.nhanab.shop.model.PaymentMethod;
+import com.nhanab.shop.model.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,11 +23,13 @@ public class Payment {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_status")
-    private String paymentStatus;
+    private PaymentStatus paymentStatus;
 
     private BigDecimal  paymentAmount;
 

@@ -6,6 +6,7 @@ import com.nhanab.shop.dto.order.UpdateOrderRequest;
 import com.nhanab.shop.dto.payload.ErrorResponse;
 import com.nhanab.shop.exception.ResourceNotFoundException;
 import com.nhanab.shop.model.Order;
+import com.nhanab.shop.model.PaymentMethod;
 import com.nhanab.shop.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -82,7 +83,7 @@ public class OrderController {
     )
     @PostMapping
     public OrderDto createOrder(@RequestBody OrderRequest orderRequest) {
-        return orderService.placeOrder(orderRequest);
+        return orderService.placeOrder(orderRequest, PaymentMethod.COD);
     }
 
     @Operation(

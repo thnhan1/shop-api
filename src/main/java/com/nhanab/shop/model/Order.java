@@ -1,6 +1,7 @@
 package com.nhanab.shop.model;
 
 import com.nhanab.shop.dto.order.ShippingAddress;
+import com.nhanab.shop.model.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,9 @@ public class Order {
     private User user;
 
     private LocalDateTime orderDate;
-    private String orderStatus;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus = OrderStatus.PENDING;
     private BigDecimal totalAmount;
     private BigDecimal taxAmount;
 
