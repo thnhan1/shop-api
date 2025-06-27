@@ -1,5 +1,10 @@
 package com.nhanab.shop.service;
 
-public interface CheckoutService {
+import com.nhanab.shop.dto.checkout.CheckoutRequest;
+import com.nhanab.shop.dto.checkout.PayOSResponse;
+import com.nhanab.shop.dto.order.OrderDto;
 
+public interface CheckoutService {
+    OrderDto checkoutWithCod(CheckoutRequest request);
+    PayOSResponse checkoutWithPayos(CheckoutRequest request);
 }
