@@ -18,7 +18,6 @@ public class OrderController {
     @PostMapping
     public Order createOrder(@RequestBody OrderRequest orderRequest) {
         return orderService.placeOrder(orderRequest);
-    }
 
     @GetMapping("/{id}")
     public Order getOrder(@PathVariable UUID id) {
