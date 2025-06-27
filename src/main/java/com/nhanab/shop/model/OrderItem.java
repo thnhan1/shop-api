@@ -17,6 +17,10 @@ public class OrderItem {
 
     private int quantity;
 
+    private String productName;
+
+    private String imageUrl;
+
     @Column(precision = 38, scale = 2)
     private BigDecimal price;
 

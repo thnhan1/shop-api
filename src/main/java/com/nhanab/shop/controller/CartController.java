@@ -8,8 +8,6 @@ import com.nhanab.shop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
@@ -36,6 +34,7 @@ public class CartController {
         }
         cartDto.setItems(cartItemDtos);
         return  cartDto;
+
     }
 
     @PostMapping("/items")
