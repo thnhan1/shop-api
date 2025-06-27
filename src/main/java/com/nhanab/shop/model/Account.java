@@ -11,8 +11,7 @@ import java.util.UUID;
 @Table(name = "account", uniqueConstraints = @UniqueConstraint(columnNames = {"provider", "provider_account_id"}))
 public class Account {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String type;
@@ -41,7 +40,7 @@ public class Account {
     @Lob
     private String oauthTokenSecret;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }

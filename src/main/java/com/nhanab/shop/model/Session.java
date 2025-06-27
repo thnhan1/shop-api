@@ -12,8 +12,7 @@ import java.util.UUID;
 @Table(name = "session")
 public class Session {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "session_token", unique = true)
@@ -21,7 +20,7 @@ public class Session {
 
     private LocalDateTime expires;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }
