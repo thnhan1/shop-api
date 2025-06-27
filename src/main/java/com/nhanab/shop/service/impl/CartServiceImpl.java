@@ -43,7 +43,6 @@ public class CartServiceImpl implements CartService {
                 .findByIdWithProductAndImages(cartItemRequest.getProductVariantId())
                 .orElseThrow(() -> new ResourceNotFoundException("ProductVariant not found"));
 
-
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartIdAndProductVariantId(cart.getId(), productVariant.getId());
         if (existingItem.isPresent()) {

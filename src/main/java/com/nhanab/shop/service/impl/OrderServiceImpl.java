@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.UUID;
+
+
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -63,6 +67,17 @@ public class OrderServiceImpl implements OrderService {
         cartService.clearCart(user.getId());
 
         return order;
+    }
+
+    @Override
+    public Order getOrderById(UUID orderId) {
+        return orderRepository.findWithItemsById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    }
+
+    @Override
+    public List<Order> getOrdersForUser(UUID userId) {
+        return orderRepository.findByUserId(userId);
     }
 
     private BigDecimal calculateTotal(Cart cart) {

@@ -16,6 +16,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/{userId}")
+
     public CartDto getCart(@PathVariable UUID userId) {
         Cart cart =  cartService.getCartByUserId(userId);
         CartDto cartDto = new CartDto();
@@ -34,6 +35,7 @@ public class CartController {
         }
         cartDto.setItems(cartItemDtos);
         return  cartDto;
+
 
     }
 

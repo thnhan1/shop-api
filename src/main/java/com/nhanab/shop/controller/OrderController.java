@@ -4,10 +4,10 @@ import com.nhanab.shop.dto.order.OrderRequest;
 import com.nhanab.shop.model.Order;
 import com.nhanab.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/orders")
 @RestController
@@ -18,5 +18,14 @@ public class OrderController {
     @PostMapping
     public Order createOrder(@RequestBody OrderRequest orderRequest) {
         return orderService.placeOrder(orderRequest);
+
+    @GetMapping("/{id}")
+    public Order getOrder(@PathVariable UUID id) {
+        return orderService.getOrderById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Order> getOrdersForUser(@PathVariable UUID userId) {
+        return orderService.getOrdersForUser(userId);
     }
 }
