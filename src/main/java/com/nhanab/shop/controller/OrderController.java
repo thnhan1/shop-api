@@ -1,7 +1,8 @@
 package com.nhanab.shop.controller;
 
 import com.nhanab.shop.dto.order.OrderRequest;
-import com.nhanab.shop.service.impl.OrderService;
+import com.nhanab.shop.model.Order;
+import com.nhanab.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +16,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public String createOrder(@RequestBody OrderRequest orderRequest) {
-        orderService.placeOrder(orderRequest);
-        return "Success";
+    public Order createOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.placeOrder(orderRequest);
     }
 }

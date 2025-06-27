@@ -13,8 +13,7 @@ import java.util.*;
 @Setter
 public class Cart {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne

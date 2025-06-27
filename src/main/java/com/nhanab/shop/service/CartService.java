@@ -14,7 +14,7 @@ public interface CartService {
 
     void clearCart(UUID userId);
 
-    void mergeGuestCartWithUserCart(UUID string);
+    void mergeGuestCartWithUserCart(UUID guestCartId);
 
 
 }

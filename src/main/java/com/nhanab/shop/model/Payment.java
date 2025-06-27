@@ -14,8 +14,7 @@ import java.util.UUID;
 @Table(name = "payment")
 public class Payment {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne
